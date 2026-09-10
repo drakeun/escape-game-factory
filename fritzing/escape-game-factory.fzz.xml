@@ -1,0 +1,310 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<module fritzingVersion="0.9.3b" moduleId="escape-game-factory-esp32">
+ <version>1.0</version>
+ <date>2026-09-10</date>
+ <author>Escape Game Factory</author>
+ <description>Escape Game Audio Trigger System - ESP32 + MRD068A + SD Module + Amplifier + Button</description>
+ <title>Escape Game Factory Audio Trigger</title>
+ 
+ <!-- ========== VIEWS ========== -->
+ <views>
+  <view name="breadboard" label="Breadboard" image="breadboard/breadboard.svg">
+   <layers image="breadboard/breadboard.svg">
+    <layer layerId="breadboard"/>
+   </layers>
+  </view>
+  <view name="schematic" label="Schematic" image="schematic/schematic.svg">
+   <layers image="schematic/schematic.svg">
+    <layer layerId="schematic"/>
+   </layers>
+  </view>
+  <view name="pcb" label="PCB" image="pcb/pcb.svg">
+   <layers image="pcb/pcb.svg">
+    <layer layerId="pcb"/>
+   </layers>
+  </view>
+ </views>
+
+ <!-- ========== CONNECTORS ========== -->
+ <connectors>
+  <!-- ESP32 DevKit Connectors -->
+  <connector id="esp32-gpio26" type="male" name="GPIO26_BCLK"/>
+  <connector id="esp32-gpio25" type="male" name="GPIO25_LRCK"/>
+  <connector id="esp32-gpio27" type="male" name="GPIO27_DIN"/>
+  <connector id="esp32-gpio34" type="male" name="GPIO34_BUTTON"/>
+  <connector id="esp32-gpio18" type="male" name="GPIO18_CLK"/>
+  <connector id="esp32-gpio23" type="male" name="GPIO23_MOSI"/>
+  <connector id="esp32-gpio19" type="male" name="GPIO19_MISO"/>
+  <connector id="esp32-gpio5" type="male" name="GPIO5_CS"/>
+  <connector id="esp32-gnd1" type="male" name="GND"/>
+  <connector id="esp32-gnd2" type="male" name="GND"/>
+  <connector id="esp32-3v3" type="male" name="3V3"/>
+  <connector id="esp32-5v" type="male" name="5V"/>
+
+  <!-- Amplifier PAM8403 Connectors -->
+  <connector id="ampli-clk" type="female" name="CLK"/>
+  <connector id="ampli-lrck" type="female" name="LRCK"/>
+  <connector id="ampli-in-plus" type="female" name="IN+"/>
+  <connector id="ampli-in-minus" type="female" name="IN-"/>
+  <connector id="ampli-gnd" type="female" name="GND"/>
+  <connector id="ampli-vcc" type="female" name="VCC"/>
+  <connector id="ampli-r-plus" type="female" name="R+"/>
+  <connector id="ampli-l-plus" type="female" name="L+"/>
+
+  <!-- SD Module Connectors -->
+  <connector id="sd-clk" type="female" name="CLK"/>
+  <connector id="sd-mosi" type="female" name="MOSI"/>
+  <connector id="sd-miso" type="female" name="MISO"/>
+  <connector id="sd-cs" type="female" name="CS"/>
+  <connector id="sd-gnd" type="female" name="GND"/>
+  <connector id="sd-vcc" type="female" name="VCC"/>
+
+  <!-- Button Connectors -->
+  <connector id="button-signal" type="male" name="SIGNAL"/>
+  <connector id="button-gnd" type="male" name="GND"/>
+  <connector id="button-vcc" type="male" name="VCC"/>
+
+  <!-- Resistor 10k Connectors -->
+  <connector id="resistor-pin1" type="male" name="PIN1"/>
+  <connector id="resistor-pin2" type="male" name="PIN2"/>
+
+  <!-- Speaker Connectors -->
+  <connector id="speaker-plus" type="female" name="PLUS"/>
+  <connector id="speaker-minus" type="female" name="MINUS"/>
+ </connectors>
+
+ <!-- ========== BUSES ========== -->
+ <buses>
+  <bus id="gnd">
+   <nodeMember connectorId="esp32-gnd1"/>
+   <nodeMember connectorId="esp32-gnd2"/>
+   <nodeMember connectorId="ampli-gnd"/>
+   <nodeMember connectorId="ampli-in-minus"/>
+   <nodeMember connectorId="sd-gnd"/>
+   <nodeMember connectorId="button-gnd"/>
+   <nodeMember connectorId="resistor-pin2"/>
+   <nodeMember connectorId="speaker-minus"/>
+  </bus>
+
+  <bus id="vcc5v">
+   <nodeMember connectorId="esp32-5v"/>
+   <nodeMember connectorId="ampli-vcc"/>
+  </bus>
+
+  <bus id="vcc3v3">
+   <nodeMember connectorId="esp32-3v3"/>
+   <nodeMember connectorId="sd-vcc"/>
+   <nodeMember connectorId="button-vcc"/>
+  </bus>
+ </buses>
+
+ <!-- ========== CONNECTIONS ========== -->
+ <connections>
+  <!-- I2S Audio Connections -->
+  <connection id="conn-bclk" startConnectorId="esp32-gpio26" endConnectorId="ampli-clk">
+   <description>GPIO26 BCLK to Amplifier CLK (Yellow cable)</description>
+   <views>
+    <breadboardView layer="breadboard"/>
+    <schematicView layer="schematic"/>
+    <pcbView layer="pcb"/>
+   </views>
+  </connection>
+
+  <connection id="conn-lrck" startConnectorId="esp32-gpio25" endConnectorId="ampli-lrck">
+   <description>GPIO25 LRCK to Amplifier LRCK (Orange cable)</description>
+   <views>
+    <breadboardView layer="breadboard"/>
+    <schematicView layer="schematic"/>
+    <pcbView layer="pcb"/>
+   </views>
+  </connection>
+
+  <connection id="conn-din" startConnectorId="esp32-gpio27" endConnectorId="ampli-in-plus">
+   <description>GPIO27 DIN to Amplifier IN+ (Red cable)</description>
+   <views>
+    <breadboardView layer="breadboard"/>
+    <schematicView layer="schematic"/>
+    <pcbView layer="pcb"/>
+   </views>
+  </connection>
+
+  <!-- SPI SD Connections -->
+  <connection id="conn-clk-sd" startConnectorId="esp32-gpio18" endConnectorId="sd-clk">
+   <description>GPIO18 CLK to SD Module CLK (Green cable)</description>
+   <views>
+    <breadboardView layer="breadboard"/>
+    <schematicView layer="schematic"/>
+    <pcbView layer="pcb"/>
+   </views>
+  </connection>
+
+  <connection id="conn-mosi" startConnectorId="esp32-gpio23" endConnectorId="sd-mosi">
+   <description>GPIO23 MOSI to SD Module MOSI (Blue cable)</description>
+   <views>
+    <breadboardView layer="breadboard"/>
+    <schematicView layer="schematic"/>
+    <pcbView layer="pcb"/>
+   </views>
+  </connection>
+
+  <connection id="conn-miso" startConnectorId="esp32-gpio19" endConnectorId="sd-miso">
+   <description>GPIO19 MISO to SD Module MISO (Purple cable)</description>
+   <views>
+    <breadboardView layer="breadboard"/>
+    <schematicView layer="schematic"/>
+    <pcbView layer="pcb"/>
+   </views>
+  </connection>
+
+  <connection id="conn-cs" startConnectorId="esp32-gpio5" endConnectorId="sd-cs">
+   <description>GPIO5 CS to SD Module CS (Gray cable)</description>
+   <views>
+    <breadboardView layer="breadboard"/>
+    <schematicView layer="schematic"/>
+    <pcbView layer="pcb"/>
+   </views>
+  </connection>
+
+  <!-- Button Connection -->
+  <connection id="conn-button" startConnectorId="esp32-gpio34" endConnectorId="button-signal">
+   <description>GPIO34 to Button Signal (Blue cable)</description>
+   <views>
+    <breadboardView layer="breadboard"/>
+    <schematicView layer="schematic"/>
+    <pcbView layer="pcb"/>
+   </views>
+  </connection>
+
+  <!-- Resistor Connection (Pull-down 10k) -->
+  <connection id="conn-resistor-gpio34" startConnectorId="resistor-pin1" endConnectorId="esp32-gpio34">
+   <description>10k Resistor to GPIO34 (Violet cable)</description>
+   <views>
+    <breadboardView layer="breadboard"/>
+    <schematicView layer="schematic"/>
+    <pcbView layer="pcb"/>
+   </views>
+  </connection>
+
+  <!-- Speaker Connection -->
+  <connection id="conn-speaker-r" startConnectorId="ampli-r-plus" endConnectorId="speaker-plus">
+   <description>Amplifier R+ to Speaker Plus (Red cable)</description>
+   <views>
+    <breadboardView layer="breadboard"/>
+    <schematicView layer="schematic"/>
+    <pcbView layer="pcb"/>
+   </views>
+  </connection>
+
+  <!-- Ground Bus Connections (implicit via buses above) -->
+  <!-- Power Bus Connections (implicit via buses above) -->
+ </connections>
+
+ <!-- ========== PARTS ========== -->
+ <parts>
+  <part id="ESP32" modelIndex="0" type="Microcontroller">
+   <property name="Part Number">ESP32-DevKit-C</property>
+   <property name="Description">Espressif ESP32 Development Board</property>
+   <property name="Manufacturer">Espressif Systems</property>
+   <views/>
+  </part>
+
+  <part id="PAM8403" modelIndex="1" type="Amplifier">
+   <property name="Part Number">PAM8403</property>
+   <property name="Description">Digital Audio Amplifier Module</property>
+   <property name="Power">5V 2A</property>
+   <views/>
+  </part>
+
+  <part id="SDModule" modelIndex="2" type="Storage">
+   <property name="Part Number">SD-Card-Module-SPI</property>
+   <property name="Description">MicroSD Card Module SPI Interface</property>
+   <views/>
+  </part>
+
+  <part id="Button" modelIndex="3" type="Switch">
+   <property name="Part Number">Push-Button-6x6mm</property>
+   <property name="Description">Push Button Switch</property>
+   <views/>
+  </part>
+
+  <part id="Resistor10k" modelIndex="4" type="Resistor">
+   <property name="Part Number">10k-1/4W</property>
+   <property name="Description">10 kOhm Resistor 1/4W Pull-down</property>
+   <property name="Resistance">10k</property>
+   <views/>
+  </part>
+
+  <part id="Speaker" modelIndex="5" type="Speaker">
+   <property name="Part Number">Speaker-8ohm-2W</property>
+   <property name="Description">8 Ohm 2W Speaker</property>
+   <property name="Impedance">8 Ohm</property>
+   <views/>
+  </part>
+
+  <part id="PowerSupply" modelIndex="6" type="Power">
+   <property name="Part Number">USB-Power-Supply-5V-2A</property>
+   <property name="Description">USB Power Supply 5V 2A</property>
+   <property name="Output">5V 2A</property>
+   <views/>
+  </part>
+ </parts>
+
+ <!-- ========== ROUTING ========== -->
+ <routing>
+  <!-- I2S Audio Routing -->
+  <net id="net-bclk" name="BCLK">
+   <segment layer="breadboard" startX="100" startY="50" endX="200" endY="150"/>
+   <segment layer="schematic" startX="50" startY="30" endX="150" endY="30"/>
+  </net>
+
+  <net id="net-lrck" name="LRCK">
+   <segment layer="breadboard" startX="100" startY="70" endX="200" endY="170"/>
+   <segment layer="schematic" startX="50" startY="50" endX="150" endY="50"/>
+  </net>
+
+  <net id="net-din" name="DIN">
+   <segment layer="breadboard" startX="100" startY="90" endX="200" endY="190"/>
+   <segment layer="schematic" startX="50" startY="70" endX="150" endY="70"/>
+  </net>
+
+  <!-- SPI SD Routing -->
+  <net id="net-clk-sd" name="CLK-SD">
+   <segment layer="breadboard" startX="100" startY="110" endX="300" endY="150"/>
+   <segment layer="schematic" startX="50" startY="90" endX="250" endY="90"/>
+  </net>
+
+  <net id="net-mosi" name="MOSI">
+   <segment layer="breadboard" startX="100" startY="130" endX="300" endY="170"/>
+   <segment layer="schematic" startX="50" startY="110" endX="250" endY="110"/>
+  </net>
+
+  <net id="net-miso" name="MISO">
+   <segment layer="breadboard" startX="100" startY="150" endX="300" endY="190"/>
+   <segment layer="schematic" startX="50" startY="130" endX="250" endY="130"/>
+  </net>
+
+  <net id="net-cs" name="CS">
+   <segment layer="breadboard" startX="100" startY="170" endX="300" endY="210"/>
+   <segment layer="schematic" startX="50" startY="150" endX="250" endY="150"/>
+  </net>
+
+  <!-- GPIO Button Routing -->
+  <net id="net-button" name="BUTTON-GPIO34">
+   <segment layer="breadboard" startX="100" startY="190" endX="400" endY="100"/>
+   <segment layer="schematic" startX="50" startY="170" endX="350" endY="70"/>
+  </net>
+
+  <!-- GND Bus -->
+  <net id="net-gnd" name="GND" bus="true">
+   <segment layer="breadboard" startX="0" startY="300" endX="500" endY="300"/>
+   <segment layer="schematic" startX="0" startY="200" endX="400" endY="200"/>
+  </net>
+
+  <!-- VCC Bus -->
+  <net id="net-vcc" name="VCC" bus="true">
+   <segment layer="breadboard" startX="0" startY="20" endX="500" endY="20"/>
+   <segment layer="schematic" startX="0" startY="10" endX="400" endY="10"/>
+  </net>
+ </routing>
+
+</module>
